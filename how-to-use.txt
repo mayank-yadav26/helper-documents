@@ -1,0 +1,8 @@
+Here's how to use this framework effectively:
+The core principle is that accuracy failures in AI-assisted development almost always happen for the same three reasons: unclear requirements, implementation that drifts from the spec, and no mechanism to catch the drift. Each phase targets one of those.
+Key practices that raise accuracy the most:
+Use the SHALL/MAY distinction in your spec (Phase 2). Vague language like "should handle errors" lets Claude guess. "The system SHALL return HTTP 422 with error code VALIDATION_FAILED when..." leaves no room for interpretation.
+Always write tests before implementation (Phase 3). This forces the interface design to happen before the internals — which means Claude's implementation has to satisfy a contract, not invent one.
+Implement one requirement per turn (Phase 4). When you ask Claude to "implement the whole thing," it makes hundreds of micro-decisions based on assumptions. One requirement at a time keeps each decision traceable and correctable.
+The spec-comment convention (// SPEC-3.2: validate unique email) is small but powerful — it makes every line of code auditable during the Phase 5 compliance check.
+For very large features, add a Phase 0 before everything else: paste your existing relevant files and ask Claude to identify any conflicts or integration points before writing the spec. This prevents the spec from being written in a vacuum.
