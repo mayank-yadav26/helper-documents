@@ -1,0 +1,235 @@
+
+<style>
+  .sdd-root { font-family: var(--font-sans); padding: 1.5rem 0; max-width: 680px; }
+  .phase { margin-bottom: 1.5rem; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .phase-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; user-select: none; background: var(--color-background-secondary); }
+  .phase-header:hover { background: var(--color-background-primary); }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .phase-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .phase-badge { font-size: 11px; padding: 3px 10px; border-radius: 99px; }
+  .chevron { font-size: 14px; color: var(--color-text-secondary); transition: transform 0.2s; }
+  .phase-body { padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.2s; }
+  .phase-body.open { max-height: 1200px; padding: 14px 18px 18px; }
+  .step { margin-bottom: 14px; }
+  .step-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .prompt-block { background: var(--color-background-secondary); border-left: 2.5px solid; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 10px 14px; font-size: 13px; color: var(--color-text-primary); line-height: 1.6; position: relative; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 3px 8px; font-size: 11px; color: var(--color-text-secondary); cursor: pointer; }
+  .copy-btn:hover { background: var(--color-background-primary); color: var(--color-text-primary); }
+  .tip { font-size: 12px; color: var(--color-text-secondary); margin-top: 6px; padding-left: 4px; }
+  .tip strong { color: var(--color-text-primary); font-weight: 500; }
+  em { color: var(--color-text-secondary); font-style: italic; }
+  kbd { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: 4px; padding: 1px 6px; font-size: 11px; font-family: var(--font-mono); }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 12px 0; }
+</style>
+
+<div class="sdd-root">
+  <h2 style="sr-only">Spec-Driven Development Framework</h2>
+
+  <!-- Phase 1 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-info);color:var(--color-text-info);">1</div>
+      <span class="phase-title">Context Dump &amp; Problem Framing</span>
+      <span class="phase-badge" style="background:var(--color-background-info);color:var(--color-text-info);">Foundation</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body open">
+      <div class="step">
+        <div class="step-label">Prompt — context injection</div>
+        <div class="prompt-block" style="border-color:#378ADD">
+          You are a senior engineer helping me build [FEATURE/SYSTEM NAME].<br><br>
+          <strong>Tech stack:</strong> [e.g. Next.js 14, Postgres, Prisma, Tailwind]<br>
+          <strong>Existing codebase context:</strong> [brief description or paste key files]<br>
+          <strong>Constraints:</strong> [performance, auth model, deadlines, team size]<br><br>
+          Do NOT write any code yet. First, confirm your understanding by restating:<br>
+          1. The core problem being solved<br>
+          2. Key constraints you'll respect<br>
+          3. What success looks like<br>
+          4. Any clarifying questions before we proceed
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> Forces explicit alignment before any implementation. Prevents "drift" where Claude solves the wrong problem confidently.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-success);color:var(--color-text-success);">2</div>
+      <span class="phase-title">Requirements Specification</span>
+      <span class="phase-badge" style="background:var(--color-background-success);color:var(--color-text-success);">Spec</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body open">
+      <div class="step">
+        <div class="step-label">Prompt — generate spec doc</div>
+        <div class="prompt-block" style="border-color:#1D9E75">
+          Now write a formal SPEC for this feature. Use this exact structure:<br><br>
+          <strong>## Overview</strong> — one-paragraph summary<br>
+          <strong>## Functional Requirements</strong> — numbered list, each starting with "The system SHALL..."<br>
+          <strong>## Non-Functional Requirements</strong> — performance, security, scalability<br>
+          <strong>## Data Model</strong> — entities, fields, relationships, constraints<br>
+          <strong>## API Contract</strong> — endpoints, request/response shapes, error codes<br>
+          <strong>## Edge Cases &amp; Invariants</strong> — what must always be true<br>
+          <strong>## Out of Scope</strong> — explicit exclusions<br><br>
+          Use precise language. Avoid "should" — use "SHALL" for mandatory, "MAY" for optional.
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> The SHALL/MAY distinction eliminates ambiguity. "Out of Scope" prevents scope creep during implementation.</p>
+      </div>
+      <hr class="divider">
+      <div class="step">
+        <div class="step-label">Prompt — spec review</div>
+        <div class="prompt-block" style="border-color:#1D9E75">
+          Review the spec you just wrote. Identify:<br>
+          1. Any requirements that are contradictory or mutually exclusive<br>
+          2. Missing requirements you'd expect for a feature like this<br>
+          3. Requirements that are under-specified (too vague to implement)<br>
+          4. Any data model issues (missing indexes, cascade rules, normalization problems)<br><br>
+          Then produce a revised SPEC v2 incorporating fixes.
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> Self-review catches ~60% of spec issues before a single line of code is written.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-warning);color:var(--color-text-warning);">3</div>
+      <span class="phase-title">Test-First Design</span>
+      <span class="phase-badge" style="background:var(--color-background-warning);color:var(--color-text-warning);">Tests</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body open">
+      <div class="step">
+        <div class="step-label">Prompt — generate tests BEFORE implementation</div>
+        <div class="prompt-block" style="border-color:#BA7517">
+          Based on the spec, write a complete test suite BEFORE any implementation code.<br><br>
+          For each functional requirement, write:<br>
+          1. A <strong>happy path test</strong> — normal expected usage<br>
+          2. An <strong>edge case test</strong> — boundary values, empty inputs, max limits<br>
+          3. A <strong>failure test</strong> — what should fail and how gracefully<br><br>
+          Use [Jest/Pytest/etc.] with descriptive test names following the pattern:<br>
+          <em>"given [state], when [action], then [expected outcome]"</em><br><br>
+          Do NOT implement the functions yet — use placeholder stubs that throw NotImplementedError.
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> Writing tests first forces you to think about the interface before the internals. Prevents tests being retrofitted to match buggy code.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-danger);color:var(--color-text-danger);">4</div>
+      <span class="phase-title">Implementation — Spec-Locked</span>
+      <span class="phase-badge" style="background:var(--color-background-danger);color:var(--color-text-danger);">Build</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body open">
+      <div class="step">
+        <div class="step-label">Prompt — implement one requirement at a time</div>
+        <div class="prompt-block" style="border-color:#E24B4A">
+          Implement ONLY Requirement [#N] from the spec:<br>
+          <em>"[paste the exact requirement]"</em><br><br>
+          Rules:<br>
+          — Do not implement any other requirement in this step<br>
+          — If implementing this requirement requires touching something outside scope, STOP and flag it<br>
+          — Add inline comments referencing the spec: <kbd>// SPEC-3.2: validate unique email</kbd><br>
+          — After writing the code, list which test cases from Phase 3 this satisfies<br><br>
+          After each requirement, output: "SPEC REQUIREMENT [#N]: IMPLEMENTED ✓"
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> One requirement per turn prevents Claude from making assumptions about future requirements and avoids over-engineering.</p>
+      </div>
+      <hr class="divider">
+      <div class="step">
+        <div class="step-label">Prompt — cross-check before continuing</div>
+        <div class="prompt-block" style="border-color:#E24B4A">
+          Before implementing the next requirement, verify the current state:<br>
+          1. List every spec requirement and mark it: ✓ Implemented / ⏳ In Progress / ✗ Not started<br>
+          2. Identify any code written that is NOT traceable to a spec requirement (remove or flag)<br>
+          3. Confirm all edge cases from the spec are handled in the current code<br><br>
+          Only proceed when I confirm.
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> "Spec traceability" — every line of code maps to a requirement. Eliminates ghost code that causes subtle bugs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);">5</div>
+      <span class="phase-title">Spec Compliance Audit</span>
+      <span class="phase-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);">Audit</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body">
+      <div class="step">
+        <div class="step-label">Prompt — final audit</div>
+        <div class="prompt-block" style="border-color:var(--color-border-secondary)">
+          Perform a complete spec compliance audit on the implementation. For EACH requirement in the spec:<br><br>
+          1. <strong>Quote</strong> the relevant code that implements it<br>
+          2. <strong>State</strong> whether it fully, partially, or does not satisfy the requirement<br>
+          3. <strong>Flag</strong> any requirement that is implemented incorrectly or with the wrong assumptions<br><br>
+          Then check the edge cases section — trace each invariant to a specific guard clause or test.<br><br>
+          Output a compliance table: | Req ID | Description | Status | Code Reference |
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> This table becomes your PR checklist and documentation artifact simultaneously.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase">
+    <div class="phase-header" onclick="toggle(this)">
+      <div class="phase-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);">6</div>
+      <span class="phase-title">Adversarial Review</span>
+      <span class="phase-badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);">Harden</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="phase-body">
+      <div class="step">
+        <div class="step-label">Prompt — attack your own code</div>
+        <div class="prompt-block" style="border-color:var(--color-border-secondary)">
+          You are now a hostile code reviewer. Your job is to find every way this implementation can break.<br><br>
+          Attack vectors to check:<br>
+          — <strong>Race conditions:</strong> What happens with concurrent requests?<br>
+          — <strong>Input abuse:</strong> Null, empty, max-length, unicode, SQL injection, XSS<br>
+          — <strong>State corruption:</strong> Partial failures — what state is left behind?<br>
+          — <strong>Performance cliffs:</strong> What inputs make this O(n²) or cause a DB full-scan?<br>
+          — <strong>Auth bypass:</strong> Can a non-owner access this resource with a crafted request?<br>
+          — <strong>Spec violations:</strong> Does any code silently do something the spec forbids?<br><br>
+          For each finding: severity (P0/P1/P2), description, reproduction steps, fix.
+          <button class="copy-btn" onclick="copyText(this)">copy</button>
+        </div>
+        <p class="tip"><strong>Why:</strong> Adversarial mode bypasses Claude's natural tendency toward optimistic implementation. It finds the things polite review misses.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+function copyText(btn) {
+  const block = btn.parentElement;
+  const text = block.innerText.replace('copy','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ copied';
+    setTimeout(() => btn.textContent = 'copy', 1500);
+  });
+}
+</script>
